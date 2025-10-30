@@ -327,6 +327,9 @@ abstract class AuthException(
         @JvmStatic
         fun from(firebaseException: Exception): AuthException {
             return when (firebaseException) {
+                // If already an AuthException, return it directly
+                is AuthException -> firebaseException
+                
                 // Handle specific Firebase Auth exceptions first (before general FirebaseException)
                 is FirebaseAuthInvalidCredentialsException -> {
                     InvalidCredentialsException(
