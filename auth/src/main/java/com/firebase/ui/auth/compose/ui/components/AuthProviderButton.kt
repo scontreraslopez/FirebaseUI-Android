@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -106,12 +107,16 @@ fun AuthProviderButton(
                 val iconTint = providerStyle.iconTint
                 if (iconTint != null) {
                     Icon(
+                        modifier = Modifier
+                            .size(24.dp),
                         painter = providerIcon.painter,
                         contentDescription = providerLabel,
                         tint = iconTint
                     )
                 } else {
                     Image(
+                        modifier = Modifier
+                            .size(24.dp),
                         painter = providerIcon.painter,
                         contentDescription = providerLabel
                     )
@@ -153,10 +158,6 @@ internal fun resolveProviderLabel(
     context: android.content.Context
 ): String = when (provider) {
     is AuthProvider.GenericOAuth -> provider.buttonLabel
-    is AuthProvider.Email -> {
-        // Use custom button label if provided, otherwise use default
-        provider.buttonLabel ?: stringProvider.signInWithEmail
-    }
     is AuthProvider.Apple -> {
         // Use Apple-specific locale if provided, otherwise use default stringProvider
         if (provider.locale != null) {

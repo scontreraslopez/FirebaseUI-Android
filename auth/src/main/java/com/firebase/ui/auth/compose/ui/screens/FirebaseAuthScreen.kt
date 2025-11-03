@@ -97,9 +97,9 @@ fun FirebaseAuthScreen(
     val coroutineScope = rememberCoroutineScope()
     val stringProvider = DefaultAuthUIStringProvider(context)
     val navController = rememberNavController()
-    val dialogController = rememberTopLevelDialogController(stringProvider)
 
     val authState by authUI.authStateFlow().collectAsState(AuthState.Idle)
+    val dialogController = rememberTopLevelDialogController(stringProvider, authState)
     val lastSuccessfulUserId = remember { mutableStateOf<String?>(null) }
     val pendingLinkingCredential = remember { mutableStateOf<AuthCredential?>(null) }
     val pendingResolver = remember { mutableStateOf<MultiFactorResolver?>(null) }
@@ -445,11 +445,6 @@ fun FirebaseAuthScreen(
                         }
                     } catch (e: Exception) {
                         Log.e("FirebaseAuthScreen", "Failed to complete email link sign-in", e)
-                    }
-
-                    // Navigate to Email auth screen for cross-device error handling
-                    if (navController.currentBackStackEntry?.destination?.route != AuthRoute.Email.route) {
-                        navController.navigate(AuthRoute.Email.route)
                     }
                 }
             }
