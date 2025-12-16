@@ -147,10 +147,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyAppTheme {
                 val configuration = authUIConfiguration {
-                    providers = listOf(
-                        AuthProvider.Email(),
-                        AuthProvider.Google()
-                    )
+                    context = applicationContext
+                    providers {
+                        provider(
+                            AuthProvider.Email(
+                                emailLinkActionCodeSettings = null,
+                                passwordValidationRules = listOf(
+                                    PasswordRule.MinimumLength(8),
+                                    PasswordRule.RequireLowercase,
+                                    PasswordRule.RequireUppercase,
+                                ),
+                            )
+                            
+                        )
+                        provider (
+                            provider = AuthProvider.Google(
+                                scopes = listOf("email"),
+                                serverClientId = "YOUR_CLIENT_ID"
+                            )
+                        )
+                    }
                 }
 
                 FirebaseAuthScreen(
@@ -167,6 +183,7 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+
         }
     }
 }
